@@ -1,6 +1,7 @@
 package com.example.smartweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.*;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button)view.findViewById(R.id.back_button);
         listView = (ListView)view.findViewById(R.id.list_view);
-        adapter = new ArrayAdapter<String>(getContext(), android.R.id.simple_list_item_1, dataList);
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, dataList);
         listView.setAdapter(adapter);
         return view;
     }
@@ -78,7 +79,15 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if(currentLevel == LEVEL_COUNTY){
+                    //从城市列表跳转到天气界面
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id", weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
+
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +101,9 @@ public class ChooseAreaFragment extends Fragment {
             }
         });
         queryProvinces();
+
+
+
     }
 
     /**
@@ -228,5 +240,7 @@ public class ChooseAreaFragment extends Fragment {
             progressDialog.dismiss();
         }
     }
+
+
 
 }
