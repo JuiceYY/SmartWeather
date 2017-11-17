@@ -54,6 +54,8 @@ public class WeatherActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     private Button navButton;
 
+    private Button settingButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +94,17 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        //三个点按钮
+        settingButton = (Button)findViewById(R.id.setting_button);
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WeatherActivity.this, AboutActivity.class);
+                startActivity(intent);
+
             }
         });
 

@@ -12,19 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".WeatherActivity" />
+
+        <service
+            android:name=".service.AutoUpdateService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WeatherActivity" />
-
-        <service
-            android:name=".service.AutoUpdateService"
-            android:enabled="true"
-            android:exported="true"></service>
     </application>
 
 </manifest>
