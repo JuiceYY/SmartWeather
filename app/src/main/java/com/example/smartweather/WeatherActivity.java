@@ -137,7 +137,8 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
         //设置下拉刷新监视器
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 requestWeather(mWeatherId);
