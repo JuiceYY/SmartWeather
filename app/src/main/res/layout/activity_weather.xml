@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.example.smartweather.WeatherActivity">
+    android:background="@color/colorPrimary">
 
     <ImageView
         android:id="@+id/bing_pic_img"
@@ -55,7 +54,7 @@
 
         <fragment
             android:id="@+id/choose_area_fragment"
-            android:name="com.example.smartweather.ChooseAreaFragment"
+            android:name="com.example.smartweather.view.fragment.ChooseCityFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"/>

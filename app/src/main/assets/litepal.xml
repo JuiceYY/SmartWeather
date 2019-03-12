@@ -7,9 +7,9 @@
     <version value="1" />
 
     <list>
-        <mapping class="com.example.smartweather.db.Province" />
-        <mapping class="com.example.smartweather.db.City" />
-        <mapping class="com.example.smartweather.db.County"/>
+        <mapping class="com.example.smartweather.old.db.Province" />
+        <mapping class="com.example.smartweather.old.db.City" />
+        <mapping class="com.example.smartweather.old.db.County"/>
     </list>
 
 </litepal>
