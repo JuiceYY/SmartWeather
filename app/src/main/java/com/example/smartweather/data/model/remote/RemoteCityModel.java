@@ -25,11 +25,6 @@ import javax.inject.Inject;
 
 public class RemoteCityModel {
 
-    @Inject
-    public RemoteCityModel(){
-
-    }
-
     public void getProvinces(final HandleProvinceRemoteListener listener) {
         RetrofitHelper.getInstance()
                 .createApi(QueryProvinceApi.class, Constant.DOMAIN)

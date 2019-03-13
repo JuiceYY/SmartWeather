@@ -1,7 +1,9 @@
 package com.example.smartweather.data.model.local;
 
 import com.example.smartweather.data.bean.City;
+import com.example.smartweather.data.bean.CityDao;
 import com.example.smartweather.data.bean.County;
+import com.example.smartweather.data.bean.CountyDao;
 import com.example.smartweather.data.bean.DaoSession;
 import com.example.smartweather.data.bean.Province;
 import com.example.smartweather.presenter.listener.HandleCityLocalListener;
@@ -20,13 +22,12 @@ import javax.inject.Inject;
 
 public class LocalCityModel {
 
-    @Inject
-    DaoSession mDaoSession;
+    private DaoSession mDaoSession;
 
-    @Inject
-    public LocalCityModel(DaoSession daoSession){
+    public LocalCityModel(DaoSession daoSession) {
         this.mDaoSession = daoSession;
     }
+
 
     public List<Province> getProvinces() {
         return mDaoSession.getProvinceDao()
@@ -34,33 +35,30 @@ public class LocalCityModel {
                 .list();
     }
 
-    public List<City> getCities(int provinceId) {
-        return mDaoSession.getCityDao()
-                .queryBuilder()
+    public List<City> getCities(int provinceCode) {
+        CityDao cityDao = mDaoSession.getCityDao();
+        return cityDao.queryBuilder()
+                .where(CityDao.Properties.ProvinceCode.eq(provinceCode))
                 .list();
     }
 
-    public List<County> getCounties(int provinceId, int cityId) {
-         return mDaoSession.getCountyDao()
-                .queryBuilder()
+    public List<County> getCounties(int provinceCode, int cityCode) {
+        CountyDao countyDao = mDaoSession.getCountyDao();
+        return countyDao.queryBuilder()
+                .where(CountyDao.Properties.CityCode.eq(cityCode))
                 .list();
     }
 
-    public void insertProvinces(List<Province> provinces){
-        for (Province province : provinces){
-            mDaoSession.getProvinceDao().insert(province);
-        }
+    public void insertProvinces(Province province) {
+        mDaoSession.getProvinceDao().insert(province);
+
     }
 
-    public void insertCities(List<City> cities){
-        for (City city: cities) {
-            mDaoSession.getCityDao().insert(city);
-        }
+    public void insertCities(City city) {
+        mDaoSession.getCityDao().insert(city);
     }
 
-    public void insertCounties(List<County> counties){
-        for (County county: counties){
+    public void insertCounties(County county) {
             mDaoSession.getCountyDao().insert(county);
-        }
     }
 }

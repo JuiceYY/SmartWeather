@@ -5,42 +5,37 @@ package com.example.smartweather.data.bean;
  * DESCRIPTION:
  */
 
+import com.google.gson.annotations.SerializedName;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class Province {
+
     @Id
-    private int id;
+    private long provinceCode;
     private String provinceName;
-    private int provinceCode;
-    @Generated(hash = 87637210)
-    public Province(int id, String provinceName, int provinceCode) {
-        this.id = id;
-        this.provinceName = provinceName;
+    @Generated(hash = 1810191997)
+    public Province(long provinceCode, String provinceName) {
         this.provinceCode = provinceCode;
+        this.provinceName = provinceName;
     }
     @Generated(hash = 1309009906)
     public Province() {
     }
-    public int getId() {
-        return this.id;
+    public long getProvinceCode() {
+        return this.provinceCode;
     }
-    public void setId(int id) {
-        this.id = id;
+    public void setProvinceCode(long provinceCode) {
+        this.provinceCode = provinceCode;
     }
     public String getProvinceName() {
         return this.provinceName;
     }
     public void setProvinceName(String provinceName) {
         this.provinceName = provinceName;
-    }
-    public int getProvinceCode() {
-        return this.provinceCode;
-    }
-    public void setProvinceCode(int provinceCode) {
-        this.provinceCode = provinceCode;
     }
 
 

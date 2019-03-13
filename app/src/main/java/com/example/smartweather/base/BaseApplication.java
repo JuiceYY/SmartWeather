@@ -1,11 +1,13 @@
 package com.example.smartweather.base;
 
 import android.app.Application;
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.smartweather.data.bean.DaoMaster;
 import com.example.smartweather.data.bean.DaoSession;
+import com.example.smartweather.di.component.ApplicationComponent;
+import com.example.smartweather.di.component.DaggerApplicationComponent;
+import com.example.smartweather.di.module.ApplicationModule;
 
 /*
  * CREATED BY: Sinry
@@ -15,21 +17,39 @@ import com.example.smartweather.data.bean.DaoSession;
 
 public class BaseApplication extends Application {
 
+    private DaoSession mDaoSession;
+
     @Override
     public void onCreate() {
         super.onCreate();
         initGreenDao();
+        initDagger();
+    }
+
+    private void initDagger() {
+        ApplicationComponent component = DaggerApplicationComponent
+                .builder()
+                .applicationModule(new ApplicationModule(this, mDaoSession))
+                .build();
+        ComponentHolder.setAooComponent(component);
     }
 
     private void initGreenDao() {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "city.db");
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
-        DaoSession daoSession = daoMaster.newSession();
+        mDaoSession = daoMaster.newSession();
     }
 
-    public DaoSession getDaoSession(){
-        return getDaoSession();
+    public static class ComponentHolder{
+        private static ApplicationComponent mComponent;
+        public static void setAooComponent(ApplicationComponent component){
+            mComponent = component;
+        }
+        public static ApplicationComponent getAppComponent(){
+            return mComponent;
+        }
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.smartweather.presenter;
 
+import com.example.smartweather.base.BaseApplication;
 import com.example.smartweather.base.IBaseView;
 import com.example.smartweather.contract.CityContract;
 import com.example.smartweather.data.bean.City;
@@ -10,6 +11,8 @@ import com.example.smartweather.data.model.remote.RemoteCityModel;
 import com.example.smartweather.data.response.CityResponse;
 import com.example.smartweather.data.response.CountyResponse;
 import com.example.smartweather.data.response.ProvinceResponse;
+import com.example.smartweather.di.component.DaggerCityPresenterComponent;
+import com.example.smartweather.di.module.CityModelModule;
 import com.example.smartweather.presenter.listener.HandleCityRemoteListener;
 import com.example.smartweather.presenter.listener.HandleCountyRemoteListener;
 import com.example.smartweather.presenter.listener.HandleProvinceRemoteListener;
@@ -35,15 +38,19 @@ public class CityPresenter implements CityContract.Presenter {
     private County mSelectedCounty;
 
 
-    private LocalCityModel mLocalCityModel;
-    private RemoteCityModel mRemoteCityModel;
+    @Inject
+    LocalCityModel mLocalCityModel;
+    @Inject
+    RemoteCityModel mRemoteCityModel;
 
     private CityContract.View mView;
 
-    @Inject
-    public CityPresenter(LocalCityModel localCityModel, RemoteCityModel remoteCityModel){
-        this.mLocalCityModel = localCityModel;
-        this.mRemoteCityModel = remoteCityModel;
+    public CityPresenter(){
+        DaggerCityPresenterComponent.builder()
+                .applicationComponent(BaseApplication.ComponentHolder.getAppComponent())
+                .cityModelModule(new CityModelModule(BaseApplication.ComponentHolder.getAppComponent().getDaoSession()))
+                .build()
+                .inject(this);
     }
 
     @Override
@@ -60,16 +67,15 @@ public class CityPresenter implements CityContract.Presenter {
                 @Override
                 public void onSuccess(List<ProvinceResponse> provinceResponseList) {
                     List<String> names = new ArrayList<>();
-                    List<Province> provinceList = new ArrayList<>();
                     for(ProvinceResponse response : provinceResponseList){
                         names.add(response.getName());
 
                         Province province = new Province();
                         province.setProvinceCode(response.getId());
                         province.setProvinceName(response.getName());
-                        provinceList.add(province);
+                        mProvinceList.add(province);
+                        mLocalCityModel.insertProvinces(province);
                     }
-                    mLocalCityModel.insertProvinces(provinceList);
                     mView.showNames(names);
                 }
 
@@ -92,24 +98,22 @@ public class CityPresenter implements CityContract.Presenter {
     @Override
     public void queryCities(int clickPosition) {
         mSelectedProvince = mProvinceList.get(clickPosition);
-        mCityList = mLocalCityModel.getCities(mSelectedProvince.getProvinceCode());
+        mCityList = mLocalCityModel.getCities((int)mSelectedProvince.getProvinceCode());
         if(mCityList == null || mCityList.size() == 0){
-            mRemoteCityModel.getCities(mSelectedProvince.getId(), new HandleCityRemoteListener() {
+            mRemoteCityModel.getCities((int)mSelectedProvince.getProvinceCode(), new HandleCityRemoteListener() {
                 @Override
                 public void onSuccess(List<CityResponse> cityResponseList) {
-                    List<City> cityList = new ArrayList<>();
                     List<String> names = new ArrayList<>();
                     for (CityResponse response : cityResponseList){
                         City city = new City();
                         city.setCityCode(response.getId());
                         city.setCityName(response.getName());
-                        city.setProvinceId(mSelectedProvince.getProvinceCode());
-                        cityList.add(city);
-
+                        city.setProvinceCode((int)mSelectedProvince.getProvinceCode());
+                        mCityList.add(city);
+                        mLocalCityModel.insertCities(city);
                         names.add(response.getName());
                     }
 
-                    mLocalCityModel.insertCities(cityList);
                     mView.showNames(names);
                 }
 
@@ -130,22 +134,22 @@ public class CityPresenter implements CityContract.Presenter {
     @Override
     public void queryCounties(int clickPosition) {
         mSelectedCity = mCityList.get(clickPosition);
-        mCountyList = mLocalCityModel.getCounties(mSelectedCity.getProvinceId(), mSelectedCity.getCityCode());
+        mCountyList = mLocalCityModel.getCounties(mSelectedCity.getProvinceCode(), (int)mSelectedCity.getCityCode());
         if(mCountyList == null || mCountyList.size() == 0){
-            mRemoteCityModel.getCounties(mSelectedCity.getProvinceId(), mSelectedCity.getCityCode(), new HandleCountyRemoteListener() {
+            mRemoteCityModel.getCounties(mSelectedCity.getProvinceCode(), (int)mSelectedCity.getCityCode(), new HandleCountyRemoteListener() {
                 @Override
                 public void onSuccess(List<CountyResponse> countyResponseList) {
-                    List<County> countyList = new ArrayList<>();
                     List<String> names = new ArrayList<>();
                     for (CountyResponse response : countyResponseList){
                         County county = new County();
-                        county.setCityId(response.getId());
+                        county.setCountyId(response.getId());
                         county.setCountyName(response.getName());
                         county.setWeatherId(response.getWeather_id());
-                        countyList.add(county);
+                        county.setCityCode((int) mSelectedCity.getCityCode());
+                        mCountyList.add(county);
+                        mLocalCityModel.insertCounties(county);
                         names.add(response.getName());
                     }
-                    mLocalCityModel.insertCounties(countyList);
                     mView.showNames(names);
                 }
 

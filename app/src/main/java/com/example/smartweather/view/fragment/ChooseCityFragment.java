@@ -15,7 +15,11 @@ import android.widget.Toast;
 
 import com.example.smartweather.R;
 import com.example.smartweather.adapter.ProvinceAdapter;
+
 import com.example.smartweather.contract.CityContract;
+import com.example.smartweather.di.component.DaggerCityViewComponent;
+import com.example.smartweather.di.module.CityPresenterModule;
+
 
 import java.util.List;
 
@@ -42,10 +46,22 @@ public class ChooseCityFragment extends Fragment implements CityContract.View {
     private static final int LEVEL_PROVINCE = 0;
     private static final int LEVEL_CITY = 1;
     private static final int LEVEL_COUNTY = 2;
-    private int currentLevel;
+    private int mCurrentLevel;
 
     @Inject
     CityContract.Presenter mPresenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DaggerCityViewComponent.builder()
+                .cityPresenterModule(new CityPresenterModule())
+                .build()
+                .inject(this);
+
+        mPresenter.takeView(this);
+
+    }
 
     @Nullable
     @Override
@@ -54,7 +70,6 @@ public class ChooseCityFragment extends Fragment implements CityContract.View {
 
         initView(view);
 
-        mPresenter.takeView(this);
         return view;
     }
 
@@ -69,18 +84,20 @@ public class ChooseCityFragment extends Fragment implements CityContract.View {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        currentLevel = LEVEL_PROVINCE;
+        mCurrentLevel = LEVEL_PROVINCE;
 
         mPresenter.queryProvinces();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (currentLevel == LEVEL_PROVINCE) {
+                if (mCurrentLevel == LEVEL_PROVINCE) {
                     mPresenter.queryCities(position);
-                } else if (currentLevel == LEVEL_CITY) {
+                    mCurrentLevel = LEVEL_CITY;
+                } else if (mCurrentLevel == LEVEL_CITY) {
                     mPresenter.queryCounties(position);
-                } else if (currentLevel == LEVEL_COUNTY) {
+                    mCurrentLevel = LEVEL_COUNTY;
+                } else if (mCurrentLevel == LEVEL_COUNTY) {
                     //从城市列表跳转到天气界面
                     mPresenter.startWeatherActivity(position);
                 }
@@ -91,6 +108,7 @@ public class ChooseCityFragment extends Fragment implements CityContract.View {
             @Override
             public void onClick(View v) {
                 mPresenter.queryProvinces();
+                mCurrentLevel = LEVEL_PROVINCE;
             }
         });
     }

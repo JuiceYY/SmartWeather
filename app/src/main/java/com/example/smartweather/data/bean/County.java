@@ -11,26 +11,28 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class County {
+
     @Id
-    private int id;
+    private long CountyId;
     private String countyName;
     private String weatherId;
-    private  int cityId;
-    @Generated(hash = 2021791012)
-    public County(int id, String countyName, String weatherId, int cityId) {
-        this.id = id;
+    private  int cityCode;
+    @Generated(hash = 1384089304)
+    public County(long CountyId, String countyName, String weatherId,
+            int cityCode) {
+        this.CountyId = CountyId;
         this.countyName = countyName;
         this.weatherId = weatherId;
-        this.cityId = cityId;
+        this.cityCode = cityCode;
     }
     @Generated(hash = 1991272252)
     public County() {
     }
-    public int getId() {
-        return this.id;
+    public long getCountyId() {
+        return this.CountyId;
     }
-    public void setId(int id) {
-        this.id = id;
+    public void setCountyId(long CountyId) {
+        this.CountyId = CountyId;
     }
     public String getCountyName() {
         return this.countyName;
@@ -44,11 +46,11 @@ public class County {
     public void setWeatherId(String weatherId) {
         this.weatherId = weatherId;
     }
-    public int getCityId() {
-        return this.cityId;
+    public int getCityCode() {
+        return this.cityCode;
     }
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
+    public void setCityCode(int cityCode) {
+        this.cityCode = cityCode;
     }
 
 
