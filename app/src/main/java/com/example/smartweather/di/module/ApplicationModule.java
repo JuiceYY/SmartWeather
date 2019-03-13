@@ -6,6 +6,7 @@ package com.example.smartweather.di.module;
  */
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.smartweather.base.BaseApplication;
 import com.example.smartweather.data.bean.DaoSession;
@@ -20,10 +21,12 @@ public class ApplicationModule {
 
     private final BaseApplication mApplication;
     private final DaoSession mDaoSession;
+    private final SharedPreferences mSp;
 
-    public ApplicationModule(BaseApplication application, DaoSession daoSession){
+    public ApplicationModule(BaseApplication application, DaoSession daoSession, SharedPreferences sp){
         this.mApplication = application;
         this.mDaoSession = daoSession;
+        this.mSp = sp;
     }
 
     @Singleton
@@ -36,6 +39,12 @@ public class ApplicationModule {
     @Singleton
     DaoSession provideDaoSession(){
         return mDaoSession;
+    }
+
+    @Singleton
+    @Provides
+    SharedPreferences provideSharedPreference(){
+        return mSp;
     }
 
 }

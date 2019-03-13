@@ -7,8 +7,6 @@ package com.example.smartweather.contract;
 
 import com.example.smartweather.base.IBasePresenter;
 import com.example.smartweather.base.IBaseView;
-import com.example.smartweather.data.bean.City;
-import com.example.smartweather.data.bean.Province;
 
 import java.util.List;
 
@@ -17,6 +15,12 @@ public interface CityContract {
     interface View extends IBaseView {
         void showNames(List<String> cities);
         void showError(String errorMsg);
+
+        void startWeatherActivity(String weatherId);
+
+        void showLoading();
+
+        void closeLoading();
     }
 
     interface Presenter extends IBasePresenter {

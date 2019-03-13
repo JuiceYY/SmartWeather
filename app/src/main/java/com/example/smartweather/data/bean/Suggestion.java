@@ -5,9 +5,14 @@ package com.example.smartweather.data.bean;
  * DESCRIPTION:
  */
 
+import com.google.gson.annotations.SerializedName;
+
 public class Suggestion {
+    @SerializedName("comf")
     private Comfort comfort;
+    @SerializedName("cw")
     private CarWash carWash;
+    @SerializedName("sport")
     private Sport sport;
 
     public Comfort getComfort() {
@@ -34,7 +39,8 @@ public class Suggestion {
         this.sport = sport;
     }
 
-    class Comfort{
+    public class Comfort{
+        @SerializedName("txt")
         private String info;
 
         public String getInfo() {
@@ -46,7 +52,8 @@ public class Suggestion {
         }
     }
 
-    class  CarWash{
+    public class CarWash{
+        @SerializedName("txt")
         private String info;
 
         public String getInfo() {
@@ -58,7 +65,8 @@ public class Suggestion {
         }
     }
 
-    class Sport{
+    public class Sport{
+        @SerializedName("txt")
         private String info;
 
         public String getInfo() {

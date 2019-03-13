@@ -9,4 +9,6 @@ public class Constant {
 
     public static final String DOMAIN = "http://guolin.tech/";
     public static final String KEY = "50755edf64f04cbbb3c2c9c716aefd02";
+
+    public static final String SHARED_WEATHER_ID = "weatherId";
 }

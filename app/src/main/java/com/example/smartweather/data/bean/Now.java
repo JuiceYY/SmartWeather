@@ -25,7 +25,7 @@ public class Now {
         this.cond = cond;
     }
 
-    class More{
+    public class More{
         private String txt;
 
         public String getTxt() {

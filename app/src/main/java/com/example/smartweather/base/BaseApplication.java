@@ -1,7 +1,9 @@
 package com.example.smartweather.base;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 
 import com.example.smartweather.data.bean.DaoMaster;
 import com.example.smartweather.data.bean.DaoSession;
@@ -18,18 +20,24 @@ import com.example.smartweather.di.module.ApplicationModule;
 public class BaseApplication extends Application {
 
     private DaoSession mDaoSession;
+    private SharedPreferences mSp;
 
     @Override
     public void onCreate() {
         super.onCreate();
         initGreenDao();
         initDagger();
+        initSharedPreference();
+    }
+
+    private void initSharedPreference() {
+        mSp = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     private void initDagger() {
         ApplicationComponent component = DaggerApplicationComponent
                 .builder()
-                .applicationModule(new ApplicationModule(this, mDaoSession))
+                .applicationModule(new ApplicationModule(this, mDaoSession, mSp))
                 .build();
         ComponentHolder.setAooComponent(component);
     }

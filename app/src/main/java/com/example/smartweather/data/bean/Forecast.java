@@ -5,6 +5,8 @@ package com.example.smartweather.data.bean;
  * DESCRIPTION:
  */
 
+import com.google.gson.annotations.SerializedName;
+
 public class Forecast {
     private String date;
 
@@ -36,7 +38,7 @@ public class Forecast {
         this.cond = cond;
     }
 
-    class Temperature{
+    public class Temperature{
         private String max;
         private String min;
 
@@ -57,7 +59,8 @@ public class Forecast {
         }
     }
 
-    class More{
+    public class More{
+        @SerializedName("txt_d")
         private String info;
 
         public String getInfo() {

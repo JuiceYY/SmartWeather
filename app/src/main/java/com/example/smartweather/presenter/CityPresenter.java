@@ -1,7 +1,9 @@
 package com.example.smartweather.presenter;
 
+import android.content.Intent;
+import android.support.v4.app.Fragment;
+
 import com.example.smartweather.base.BaseApplication;
-import com.example.smartweather.base.IBaseView;
 import com.example.smartweather.contract.CityContract;
 import com.example.smartweather.data.bean.City;
 import com.example.smartweather.data.bean.County;
@@ -60,12 +62,16 @@ public class CityPresenter implements CityContract.Presenter {
 
     @Override
     public void queryProvinces() {
+
+        mView.showLoading();
+
         mProvinceList = mLocalCityModel.getProvinces();
         if(mProvinceList == null || mProvinceList.size() == 0){
             //本地无数据, 联网查询
             mRemoteCityModel.getProvinces(new HandleProvinceRemoteListener() {
                 @Override
                 public void onSuccess(List<ProvinceResponse> provinceResponseList) {
+                    mView.closeLoading();
                     List<String> names = new ArrayList<>();
                     for(ProvinceResponse response : provinceResponseList){
                         names.add(response.getName());
@@ -81,11 +87,13 @@ public class CityPresenter implements CityContract.Presenter {
 
                 @Override
                 public void onFailed(String errorMsg) {
+                    mView.closeLoading();
                     mView.showError(errorMsg);
                 }
             });
         }else{
             //本地有数据
+            mView.closeLoading();
             List<String> names = new ArrayList<>();
             for (Province province: mProvinceList){
                 names.add(province.getProvinceName());
@@ -97,12 +105,14 @@ public class CityPresenter implements CityContract.Presenter {
 
     @Override
     public void queryCities(int clickPosition) {
+        mView.showLoading();
         mSelectedProvince = mProvinceList.get(clickPosition);
         mCityList = mLocalCityModel.getCities((int)mSelectedProvince.getProvinceCode());
         if(mCityList == null || mCityList.size() == 0){
             mRemoteCityModel.getCities((int)mSelectedProvince.getProvinceCode(), new HandleCityRemoteListener() {
                 @Override
                 public void onSuccess(List<CityResponse> cityResponseList) {
+                    mView.closeLoading();
                     List<String> names = new ArrayList<>();
                     for (CityResponse response : cityResponseList){
                         City city = new City();
@@ -119,10 +129,12 @@ public class CityPresenter implements CityContract.Presenter {
 
                 @Override
                 public void onFailed(String errorMsg) {
+                    mView.closeLoading();
                     mView.showError(errorMsg);
                 }
             });
         }else {
+            mView.closeLoading();
             List<String> names = new ArrayList<>();
             for (City city : mCityList){
                 names.add(city.getCityName());
@@ -133,12 +145,14 @@ public class CityPresenter implements CityContract.Presenter {
 
     @Override
     public void queryCounties(int clickPosition) {
+        mView.showLoading();
         mSelectedCity = mCityList.get(clickPosition);
         mCountyList = mLocalCityModel.getCounties(mSelectedCity.getProvinceCode(), (int)mSelectedCity.getCityCode());
         if(mCountyList == null || mCountyList.size() == 0){
             mRemoteCityModel.getCounties(mSelectedCity.getProvinceCode(), (int)mSelectedCity.getCityCode(), new HandleCountyRemoteListener() {
                 @Override
                 public void onSuccess(List<CountyResponse> countyResponseList) {
+                    mView.closeLoading();
                     List<String> names = new ArrayList<>();
                     for (CountyResponse response : countyResponseList){
                         County county = new County();
@@ -155,11 +169,13 @@ public class CityPresenter implements CityContract.Presenter {
 
                 @Override
                 public void onFailed(String errorMsg) {
+                    mView.closeLoading();
                     mView.showError(errorMsg);
                 }
             });
 
         }else {
+            mView.closeLoading();
             List<String> names = new ArrayList<>();
             for (County county : mCountyList){
                 names.add(county.getCountyName());
@@ -170,7 +186,9 @@ public class CityPresenter implements CityContract.Presenter {
 
     @Override
     public void startWeatherActivity(int clickPosition) {
-
+        mSelectedCounty = mCountyList.get(clickPosition);
+        String weatherId = mSelectedCounty.getWeatherId();
+        mView.startWeatherActivity(weatherId);
     }
 
 }

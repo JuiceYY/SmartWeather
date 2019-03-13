@@ -16,7 +16,7 @@ public class AQI {
         this.city = city;
     }
 
-    class  AQICity{
+    public class  AQICity{
         private String aqi;
         private String pm25;
 

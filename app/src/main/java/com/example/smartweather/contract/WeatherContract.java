@@ -12,32 +12,46 @@ import com.example.smartweather.data.bean.Basic;
 import com.example.smartweather.data.bean.Forecast;
 import com.example.smartweather.data.bean.Now;
 import com.example.smartweather.data.bean.Suggestion;
+import com.example.smartweather.data.response.WeatherResponse;
+
+import java.util.List;
 
 public interface WeatherContract {
 
-    interface ViewI extends IBaseView {
+    interface View extends IBaseView {
 
         void showWeather();
-
-        void showError(String errorMsg);
 
         void showBasic(Basic basic);
 
         void showNow(Now now);
 
-        void showForecast(Forecast forecast);
+        void showForecast(List<Forecast> forecastList);
 
         void showAqi(AQI aqi);
 
         void showSuggestion(Suggestion suggestion);
 
-        void showBackgroundPic();
+        void showError(String errorMsg);
 
-        void openSelectCity();
+        void showBackgroundPic(String picUrl);
+
+        void showLoading();
+
+        void closeLoading();
 
     }
 
-    interface PresenterI extends IBasePresenter {
+    interface Presenter extends IBasePresenter {
+
+        void takeView(View view);
+
+        void startAutoUpdateService();
+
+        void queryWeather(String weatherId);
+
+        void getBackgroundPic();
+
 
     }
 }

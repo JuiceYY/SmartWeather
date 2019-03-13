@@ -6,16 +6,20 @@ package com.example.smartweather.data.response;
  */
 
 import com.example.smartweather.data.bean.HeWeather;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class WeatherResponse {
 
-    private HeWeather heWeather;
+    @SerializedName("HeWeather")
+    private List<HeWeather> heWeather;
 
-    public HeWeather getHeWeather() {
+    public List<HeWeather> getHeWeather() {
         return heWeather;
     }
 
-    public void setHeWeather(HeWeather heWeather) {
+    public void setHeWeather(List<HeWeather> heWeather) {
         this.heWeather = heWeather;
     }
 }

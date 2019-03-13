@@ -6,6 +6,7 @@ package com.example.smartweather.di.component;
  */
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.smartweather.base.BaseApplication;
 import com.example.smartweather.data.bean.DaoSession;
@@ -21,5 +22,6 @@ public interface ApplicationComponent {
 
     BaseApplication getApplication();
     DaoSession getDaoSession();
+    SharedPreferences getSharedPreference();
 
 }

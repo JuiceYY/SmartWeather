@@ -34,7 +34,7 @@ public class Basic {
         this.update = update;
     }
 
-    class Update{
+    public class Update{
         private String loc;
 
         public String getUpdateTime() {
