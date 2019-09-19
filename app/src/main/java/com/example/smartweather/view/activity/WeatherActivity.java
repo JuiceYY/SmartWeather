@@ -83,7 +83,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
         mPresenter.takeView(this);
 
-//        initData();
+        initData();
         initView();
 
     }
@@ -121,7 +121,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                mPresenter.queryWeather(mWeatherId);
+                mPresenter.queryWeather(mWeatherId);
                 mPresenter.getBackgroundPic();
             }
         });
